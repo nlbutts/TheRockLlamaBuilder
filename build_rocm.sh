@@ -23,8 +23,11 @@ fi
 
 echo "Pulling down $TARBALL for target $GPU_TARGET"
 wget "https://therock-nightly-tarball.s3.amazonaws.com/$TARBALL"
-sudo mkdir -p /opt/rocm
-sudo tar -xzf "$TARBALL" -C /opt/rocm --strip-components=1
+sudo mkdir -p /opt/rocm-7.13.0
+sudo tar -xzf "$TARBALL" -C /opt/rocm-7.13.0 --strip-components=1
+
+sudo rm /opt/rocm
+sudo ln -s /opt/rocm-7.13.0 /opt/rocm
 
 # Set up the paths for the TheRock download.
 export HIP_PATH=/opt/rocm
@@ -47,6 +50,7 @@ fi
 
 # Build llama.cpp
 cd llama.cpp
+rm -rf build_rocm
 mkdir -p build_rocm
 cd build_rocm
 cmake .. -G Ninja \
